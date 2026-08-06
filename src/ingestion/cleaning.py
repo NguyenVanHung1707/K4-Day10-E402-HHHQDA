@@ -108,3 +108,30 @@ def build_clean_dataframe(
         ["published", "paper_id"], ascending=[False, True], kind="stable"
     ).reset_index(drop=True)
     return dataframe.astype({"age_days": "int64", "summary_chars": "int64"})
+
+def clean_repaired_data(
+    raw_records: list[PaperRecord] | list[dict], run_date: datetime
+) -> pd.DataFrame:
+    """Rebuild the clean dataset from the trusted raw snapshot.
+
+    Repair starts from raw records instead of modifying corrupted clean data,
+    so every derived field is recreated from the source of truth.
+    """
+    repaired = build_clean_dataframe(raw_records, run_date=run_date)
+
+    if list(repaired.columns) != CLEAN_COLUMNS:
+        raise ValueError(
+            "Repaired dataset violates the clean schema contract: "
+            f"expected {CLEAN_COLUMNS}, got {list(repaired.columns)}"
+        )
+    if not repaired.empty:
+        invalid_rows = (
+            repaired["paper_id"].eq("")
+            | repaired["title"].eq("")
+            | repaired["summary"].eq("")
+            | repaired["paper_id"].duplicated(keep=False)
+        )
+        if invalid_rows.any():
+            raise ValueError("Repaired dataset contains invalid or duplicate records")
+
+    return repaired
