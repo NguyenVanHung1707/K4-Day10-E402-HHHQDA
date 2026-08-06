@@ -1,0 +1,42 @@
+{
+  "report_name": "corrupted_quality",
+  "total_checks": 5,
+  "passed_checks": 2,
+  "checks": [
+    {
+      "check_name": "row_count",
+      "dimension": "Completeness",
+      "passed": true,
+      "score": 1.0,
+      "details": "Total rows: 25"
+    },
+    {
+      "check_name": "paper_id_validity",
+      "dimension": "Validity",
+      "passed": false,
+      "score": 0.88,
+      "details": "Nulls: 0, Uniques: 22/25"
+    },
+    {
+      "check_name": "title_completeness",
+      "dimension": "Completeness",
+      "passed": true,
+      "score": 1.0,
+      "details": "Null or empty titles: 0"
+    },
+    {
+      "check_name": "summary_validity",
+      "dimension": "Validity",
+      "passed": false,
+      "score": 0.96,
+      "details": "Valid summaries: 24/25"
+    },
+    {
+      "check_name": "freshness_check",
+      "dimension": "Freshness",
+      "passed": false,
+      "score": 0.92,
+      "details": "Fresh rows: 23/25"
+    }
+  ]
+}
