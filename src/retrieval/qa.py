@@ -21,18 +21,41 @@ def _extract_answer(question: str, top_result: SearchResult) -> str:
     lowered = question.lower()
     metadata = top_result.metadata
     if "who authored" in lowered or "list the authors" in lowered:
-        return metadata["authors_joined"]
+        return str(metadata.get("authors_joined") or "Unknown from the indexed corpus.")
     if "when was" in lowered or "publication date" in lowered or "published on" in lowered:
-        return metadata["published"]
+        return str(metadata.get("published") or "Unknown from the indexed corpus.")
     if "what categories" in lowered:
-        return metadata["categories_joined"]
-    return first_sentence(metadata["summary"])
+        return str(metadata.get("categories_joined") or "Unknown from the indexed corpus.")
+    summary = str(metadata.get("summary") or "")
+    return first_sentence(summary) if summary else "I don't know from the indexed corpus."
+
+
+def _find_exact_document(question: str, index: LocalEmbeddingIndex) -> dict | None:
+    quoted_values = re.findall(r"['\"]([^'\"]+)['\"]", question)
+    for value in quoted_values:
+        exact = index.lookup(value)
+        if exact:
+            return exact
+
+    lowered = question.lower()
+    for paper_id, document in index.documents_by_paper_id.items():
+        if paper_id in lowered:
+            return document
+    return None
 
 
 def answer_question(question: str, settings: Settings, index: LocalEmbeddingIndex, top_k: int | None = None) -> AnswerResult:
-    title_match = re.search(r"'([^']+)'", question)
-    exact = index.lookup(title_match.group(1)) if title_match else None
-    retrieved = index.search(question, top_k=top_k)
+    question = question.strip()
+    if not question:
+        raise ValueError("question must not be empty")
+    requested_top_k = top_k or settings.top_k
+    if requested_top_k < 1:
+        raise ValueError("top_k must be at least 1")
+    collection_size = index.collection.count()
+    safe_top_k = min(requested_top_k, collection_size) if collection_size else 0
+
+    exact = _find_exact_document(question, index)
+    retrieved = index.search(question, top_k=safe_top_k) if safe_top_k else []
     if exact:
         exact_result = SearchResult(
             paper_id=exact["paper_id"],
@@ -42,7 +65,7 @@ def answer_question(question: str, settings: Settings, index: LocalEmbeddingInde
             metadata=exact["metadata"],
         )
         deduped = [exact_result] + [item for item in retrieved if item.paper_id != exact_result.paper_id]
-        retrieved = deduped[: (top_k or settings.top_k)]
+        retrieved = deduped[:requested_top_k]
     if not retrieved:
         answer = "I don't know from the indexed corpus."
     else:
