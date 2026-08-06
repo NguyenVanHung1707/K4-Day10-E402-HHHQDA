@@ -1,7 +1,7 @@
 {
   "backend": "chroma",
   "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
-  "persist_path": "D:\\Uni\\Code\\K4-Day10-E402-HHHQDA\\data\\chroma",
+  "persist_path": "E:\\hung\\VinAI\\Lab\\Lab10\\DAY10_2A202601284_NguyenVanHung\\data\\chroma",
   "collection_name": "papers-repaired",
   "documents": [
     {

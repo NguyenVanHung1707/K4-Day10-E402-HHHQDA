@@ -4,12 +4,12 @@
 
 | Metric | Baseline | Corrupted | Repaired |
 |---|---|---|---|
-| judge_accuracy | 0.9 | 0.3 | 0.9 |
-| mean_judge_score | 4.5 | 2.1 | 4.4 |
-| mean_token_f1 | 0.842 | 0.325 | 0.821 |
-| ragas | {'answer_relevancy': 0.88, 'context_precision': 0.91, 'context_recall': 0.89, 'faithfulness': 0.93} | {'answer_relevancy': 0.42, 'context_precision': 0.38, 'context_recall': 0.35, 'faithfulness': 0.4} | {'answer_relevancy': 0.87, 'context_precision': 0.9, 'context_recall': 0.88, 'faithfulness': 0.91} |
-| retrieval_hit_rate | 0.9 | 0.4 | 0.92 |
-| samples | 10 | 10 | 5 |
+| judge_accuracy | 0.9 | 0.0 | 0.041666666666666664 |
+| mean_judge_score | 4.5 | 1 | 1.0833333333333333 |
+| mean_token_f1 | 0.842 | 0.21882245848688225 | 0.27048090276528997 |
+| ragas | {'answer_relevancy': 0.88, 'context_precision': 0.91, 'context_recall': 0.89, 'faithfulness': 0.93} | {'skipped': 'Set RUN_RAGAS=1 to enable the slower Ragas pass.'} | {'skipped': 'Set RUN_RAGAS=1 to enable the slower Ragas pass.'} |
+| retrieval_hit_rate | 0.9 | 0.875 | 1.0 |
+| samples | 10 | 24 | 24 |
 
 ## 2. Data Quality Comparison
 

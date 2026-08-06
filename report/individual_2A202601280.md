@@ -2,6 +2,7 @@
 
 ## 1. Thông tin cá nhân
 
+<<<<<<< HEAD
 | Thông tin | Nội dung |
 | --- | --- |
 | Họ và tên | Phạm Công Đăng |
@@ -11,11 +12,23 @@
 | Vai trò chính | Vector Indexing & RAG Agent Owner (TV4) |
 | Repository | `DAY10_2A202601284_NguyenVanHung` |
 | Ngày hoàn thành | 2026-08-06 |
+=======
+| Thông tin         | Nội dung                  |
+| ------------------ | -------------------------- |
+| Họ và tên       | Phạm Công Đăng             |
+| MSSV               | 2A202601280                |
+| Khóa/Lớp         | K4                         |
+| Tên nhóm         | Nhóm 6 Thành Viên          |
+| Vai trò chính    | Vector Indexing & RAG Agent Owner |
+| Repository         | https://github.com/NguyenVanHung1707/K4-Day10-E402-HHHQDA.git |
+| Ngày hoàn thành | 2026-08-06                 |
+>>>>>>> 41af95a (docs: complete group report and all 6 individual role reports with E2E metrics)
 
 ## 2. Vai trò và phạm vi công việc
 
 ### Phần việc sở hữu
 
+<<<<<<< HEAD
 | Module/deliverable | File/hàm phụ trách | Input nhận vào | Output bàn giao | Trạng thái |
 | --- | --- | --- | --- | --- |
 | Embedding và Vector Store | `src/retrieval/embeddings.py`, `src/retrieval/index.py`; `MiniLMEmbeddings`, `LocalEmbeddingIndex` | `CleanPaperRecordSchema`, đặc biệt `paper_id`, `title`, `summary`, `text_for_embedding`; các dataset baseline/corrupted/repaired | Ba ChromaDB collection và ba manifest trong `data/embeddings/` | Hoàn thành |
@@ -42,10 +55,30 @@
 | Chuẩn hóa Chroma metadata | `LocalEmbeddingIndex._metadata_value` trong `index.py` | Không còn giá trị `NaN` trong corrupted/repaired manifest | Parse hai manifest và kiểm tra đệ quy `has_nan == False` |
 
 Một output cụ thể do phần việc của tôi tạo ra là `data/embeddings/papers_embeddings_repaired.json`. Artifact chứa 24 document của collection `papers-repaired`; sau khi chuẩn hóa metadata, phần `documents` khớp hoàn toàn với baseline manifest. Repaired Agent load collection này thành công, exact lookup đưa đúng tài liệu lên hạng đầu và Gemini trả đúng title kèm `paper_id`.
+=======
+| Module/deliverable | File/hàm phụ trách | Input nhận vào | Output bàn giao  | Trạng thái                                 |
+| ------------------ | --------------------- | ---------------- | ----------------- | -------------------------------------------- |
+| Vector Indexing    | `src/retrieval/index.py`, `src/retrieval/embeddings.py` | Cleaned Dataset (`data/clean/papers_clean.json`) | ChromaDB collection (`papers-baseline`, `papers-corrupted`, `papers-repaired`) và `data/embeddings/papers_embeddings.json` | Hoàn thành |
+| Multi-LLM Provider & RAG Agent | `src/retrieval/llm.py`, `src/retrieval/agent.py`, `src/retrieval/qa.py` | Query từ người dùng / Evaluation set | Câu trả lời từ RAG Agent và retrieved doc IDs | Hoàn thành |
+
+### Việc hỗ trợ ngoài phạm vi chính
+
+| Hoạt động                         | Thành viên/module được hỗ trợ | Kết quả                    |
+| ------------------------------------ | ------------------------------------ | ---------------------------- |
+| Phối hợp kết nối Vector Database | TV5 (Evaluation Owner) | Đã cung cấp interface `LocalEmbeddingIndex` hỗ trợ hàm `search` và `lookup` để TV5 đo đạc metrics |
+
+## 3. Kết quả theo vai trò
+
+| Nhiệm vụ đã thực hiện | File/hàm/artifact liên quan | Kết quả bàn giao       | Cách xác minh         |
+| --------------------------- | ----------------------------- | ------------------------- | ----------------------- |
+| Xây dựng Vector Embedding Index | `src/retrieval/index.py` | ChromaDB collection & manifest JSON | `python script/run_phase1.py` |
+| Tích hợp Đa LLM Provider & Agent | `src/retrieval/agent.py`, `src/retrieval/llm.py` | RAG Agent truy vấn ngữ nghĩa | `python script/run_corruption_flow.py` |
+>>>>>>> 41af95a (docs: complete group report and all 6 individual role reports with E2E metrics)
 
 ## 4. Giải thích phần kỹ thuật đã thực hiện
 
 ### Vấn đề cần giải quyết
+<<<<<<< HEAD
 
 Phần TV4 chuyển cleaned dataset thành vector index có thể truy vấn và cung cấp lớp RAG Agent cho TV5 đánh giá. Index phải giữ document identity ổn định, tách riêng ba trạng thái baseline/corrupted/repaired, hỗ trợ semantic search và exact lookup, đồng thời không để dữ liệu lỗi ở một trạng thái ghi đè trạng thái khác.
 
@@ -162,6 +195,26 @@ Tôi sẽ bổ sung automated tests cho ba collection và một evaluation test 
 - [x] Tôi không ghi “đã chạy thành công” cho phần chưa được kiểm chứng.
 - [x] Báo cáo không chứa `.env`, API key, token hoặc secret.
 - [x] Báo cáo này không phải bản sao nguyên văn của báo cáo nhóm hoặc báo cáo thành viên khác.
+=======
+Chuyển đổi dữ liệu bài báo học thuật đã làm sạch thành vector embeddings, nạp vào ChromaDB vector database và xây dựng RAG Agent có khả năng Semantic Search + Lookup để trả lời câu hỏi chính xác.
+
+### Cách triển khai
+- Dùng `sentence-transformers/all-MiniLM-L6-v2` để vector hóa chuỗi `text_for_embedding`.
+- Nạp vào ChromaDB `PersistentClient` với khoảng cách Cosine Similarity.
+- Hỗ trợ đa LLM Provider trong `llm.py` (Gemini, OpenAI, Anthropic, OpenRouter, Ollama).
+
+## 5. Phân tích kết quả Metrics
+
+| Metric/signal          | Baseline | Corrupted | Repaired | Nhận xét cá nhân |
+| ---------------------- | -------: | --------: | -------: | ------------------------- |
+| `retrieval_hit_rate` |     1.00 |     0.875 |     1.00 | Dữ liệu lỗi làm giảm hit rate, repair giúp phục hồi 100% |
+| `mean_token_f1`      |   0.2705 |    0.2188 |   0.2705 | Độ tương đồng token phục hồi hoàn toàn sau khi repair |
+
+## 6. Cam kết của thành viên
+- [x] Nội dung báo cáo phản ánh đúng phần việc và mức hiểu của tôi.
+- [x] Tôi có thể giải thích luồng end-to-end, không chỉ module mình phụ trách.
+- [x] Mọi kết luận về kết quả đều có artifact hoặc metric để đối chiếu.
+>>>>>>> 41af95a (docs: complete group report and all 6 individual role reports with E2E metrics)
 
 **Họ và tên:** Phạm Công Đăng  
 **Ngày xác nhận:** 2026-08-06
