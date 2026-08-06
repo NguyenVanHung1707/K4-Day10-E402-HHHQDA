@@ -41,6 +41,17 @@ class LocalEmbeddingIndex:
         self.documents_by_title = {document["title"].lower(): document for document in documents}
 
     @staticmethod
+    def _metadata_value(value: Any) -> str | int | float | bool:
+        """Convert dataframe values to stable Chroma-compatible metadata scalars."""
+        if value is None or pd.isna(value):
+            return ""
+        if hasattr(value, "item"):
+            value = value.item()
+        if isinstance(value, (str, int, float, bool)):
+            return value
+        return str(value)
+
+    @staticmethod
     def _build_documents(df: pd.DataFrame) -> list[dict[str, Any]]:
         records = df.to_dict(orient="records")
         documents: list[dict[str, Any]] = []
@@ -52,14 +63,14 @@ class LocalEmbeddingIndex:
                     "title": row["title"],
                     "content": row["text_for_embedding"],
                     "metadata": {
-                        "paper_id": row["paper_id"],
-                        "title": row["title"],
-                        "published": row["published"],
-                        "authors_joined": row["authors_joined"],
-                        "categories_joined": row["categories_joined"],
-                        "summary": row["summary"],
-                        "abs_url": row["abs_url"],
-                        "pdf_url": row["pdf_url"],
+                        "paper_id": LocalEmbeddingIndex._metadata_value(row["paper_id"]),
+                        "title": LocalEmbeddingIndex._metadata_value(row["title"]),
+                        "published": LocalEmbeddingIndex._metadata_value(row["published"]),
+                        "authors_joined": LocalEmbeddingIndex._metadata_value(row["authors_joined"]),
+                        "categories_joined": LocalEmbeddingIndex._metadata_value(row["categories_joined"]),
+                        "summary": LocalEmbeddingIndex._metadata_value(row["summary"]),
+                        "abs_url": LocalEmbeddingIndex._metadata_value(row["abs_url"]),
+                        "pdf_url": LocalEmbeddingIndex._metadata_value(row["pdf_url"]),
                     },
                 }
             )
