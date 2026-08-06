@@ -161,5 +161,5 @@ Tích hợp thư viện RAGAS đầy đủ với các chỉ số chuyên sâu h�
 
 [X] Báo cáo này không phải bản sao nguyên văn của báo cáo nhóm hoặc báo cáo thành viên khác.
 
-**Họ và tên:** Nguyễn Văn A
+**Họ và tên:** Phạm Trung Hiếu
 **Ngày xác nhận:** 2026-08-06
