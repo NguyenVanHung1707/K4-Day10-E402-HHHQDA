@@ -40,6 +40,75 @@ class Paths:
     comparison_report: Path
 
 
+# ---------------------------------------------------------------------------
+# Data Schemas Chuẩn Cho Các Giai Đoạn (Do TV1 - Nguyễn Văn Hưng Chốt Contract)
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class RawPaperRecordSchema:
+    """Schema chuẩn cho dữ liệu thô thu thập từ Crossref API (Giai đoạn Ingestion - TV2)."""
+    paper_id: str
+    doi: str
+    title: str
+    abstract: str | None
+    authors: list[str]
+    categories: list[str]
+    primary_category: str
+    published: str
+    updated: str
+    abs_url: str
+    pdf_url: str
+    comment: str
+
+
+@dataclass(frozen=True)
+class CleanPaperRecordSchema:
+    """Schema chuẩn cho dữ liệu đã làm sạch sẵn sàng cho Embedding & Vector Indexing (Giai đoạn Cleaning - TV3)."""
+    paper_id: str
+    title: str
+    summary: str
+    authors_joined: str
+    categories_joined: str
+    primary_category: str
+    published: str
+    updated: str
+    age_days: int
+    summary_chars: int
+    text_for_embedding: str
+    abs_url: str
+    pdf_url: str
+
+
+@dataclass(frozen=True)
+class EvaluationSampleSchema:
+    """Schema chuẩn cho mẫu kiểm thử Evaluation Set (Giai đoạn Evaluation - TV5)."""
+    sample_id: str
+    question: str
+    ground_truth: str
+    ground_truth_doc_ids: list[str]
+    question_type: str
+
+
+@dataclass(frozen=True)
+class DataQualityCheckSchema:
+    """Schema chuẩn cho chỉ số giám sát Data Quality & Observability (Giai đoạn Observability - TV6)."""
+    check_name: str
+    dimension: str  # Completeness, Validity, Uniqueness, Freshness
+    passed: bool
+    score: float
+    details: str
+
+
+@dataclass(frozen=True)
+class CorruptionLogSchema:
+    """Schema chuẩn cho nhật ký tạo dữ liệu lỗi (Giai đoạn Corruption Flow - TV6)."""
+    corruption_type: str
+    affected_count: int
+    timestamp: str
+    description: str
+
+
+
 @dataclass(frozen=True)
 class Settings:
     llm_provider: str
