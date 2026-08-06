@@ -17,7 +17,7 @@
 |    2 | Thành viên 2    | MSSV_TV2    | Data Ingestion Owner (Crossref API & Raw Data)              | `src/ingestion/crossref.py`, `data/raw/`                                                                                                             |
 |    3 | Thành viên 3    | MSSV_TV3    | Data Cleaning & Data Modeling Owner                         | `src/ingestion/cleaning.py`, `data/clean/`                                                                                                           |
 |    4 | Thành viên 4    | MSSV_TV4    | Vector Indexing & RAG Agent Owner                           | `src/retrieval/embeddings.py`, `src/retrieval/index.py`, `src/retrieval/llm.py`, `src/retrieval/agent.py`, `src/retrieval/qa.py`, `data/embeddings/` |
-|    5 | Thành viên 5    | MSSV_TV5    | Evaluation & Metrics Owner                                  | `src/evaluation/testset.py`, `src/evaluation/metrics.py`, `data/eval/`, `data/results/`                                                              |
+|    5 | Phạm Trung Hiếu    | 2A202601834    | Evaluation & Metrics Owner                                  | `src/evaluation/testset.py`, `src/evaluation/metrics.py`, `data/eval/`, `data/results/`                                                              |
 |    6 | Thành viên 6    | MSSV_TV6    | Data Observability, Corruption Simulation & Reporting Owner | `src/observability/quality.py`, `src/observability/reporting.py`, `src/ingestion/corruption.py`, `data/quality/`, `data/reports/`                    |
 
 ### Chi tiết phân công công việc theo từng pha (Phase Breakdown)
