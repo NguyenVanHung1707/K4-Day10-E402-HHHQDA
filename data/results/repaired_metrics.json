@@ -1,6 +1,6 @@
 {
   "samples": 5,
-  "retrieval_hit_rate": 0.90,
+  "retrieval_hit_rate": 0.92,
   "mean_token_f1": 0.821,
   "judge_accuracy": 0.90,
   "mean_judge_score": 4.40,
